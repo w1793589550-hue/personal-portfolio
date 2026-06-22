@@ -1,0 +1,114 @@
+[
+  {
+    "src": "assets/works/work-01.jpg",
+    "title": "招新视觉",
+    "tag": "校园活动海报",
+    "w": 576,
+    "h": 1400
+  },
+  {
+    "src": "assets/works/work-02.jpg",
+    "title": "瑜伽课程",
+    "tag": "健康品牌海报",
+    "w": 990,
+    "h": 1400
+  },
+  {
+    "src": "assets/works/work-03.jpg",
+    "title": "甜品长图",
+    "tag": "电商详情页",
+    "w": 700,
+    "h": 1400
+  },
+  {
+    "src": "assets/works/work-04.jpg",
+    "title": "米粉广告",
+    "tag": "餐饮横幅",
+    "w": 1400,
+    "h": 384
+  },
+  {
+    "src": "assets/works/work-05.jpg",
+    "title": "婚礼企划",
+    "tag": "节日活动海报",
+    "w": 622,
+    "h": 1400
+  },
+  {
+    "src": "assets/works/work-06.jpg",
+    "title": "企业介绍",
+    "tag": "展板视觉",
+    "w": 1400,
+    "h": 700
+  },
+  {
+    "src": "assets/works/work-07.jpg",
+    "title": "调酒主题",
+    "tag": "餐饮海报",
+    "w": 934,
+    "h": 1400
+  },
+  {
+    "src": "assets/works/work-08.jpg",
+    "title": "黄金产品",
+    "tag": "电商主视觉",
+    "w": 1400,
+    "h": 583
+  },
+  {
+    "src": "assets/works/work-09.jpg",
+    "title": "射箭价目表",
+    "tag": "信息排版",
+    "w": 953,
+    "h": 1242
+  },
+  {
+    "src": "assets/works/work-10.jpg",
+    "title": "三角洲行动",
+    "tag": "游戏视觉",
+    "w": 800,
+    "h": 800
+  },
+  {
+    "src": "assets/works/work-11.jpg",
+    "title": "爱情哲学",
+    "tag": "横版封面",
+    "w": 1400,
+    "h": 788
+  },
+  {
+    "src": "assets/works/work-12.jpg",
+    "title": "早餐产品",
+    "tag": "食物海报",
+    "w": 990,
+    "h": 1400
+  },
+  {
+    "src": "assets/works/work-13.jpg",
+    "title": "养生主题",
+    "tag": "传统风格海报",
+    "w": 990,
+    "h": 1400
+  },
+  {
+    "src": "assets/works/work-14.jpg",
+    "title": "腕表产品",
+    "tag": "商品主图",
+    "w": 800,
+    "h": 800
+  },
+  {
+    "src": "assets/works/work-15.jpg",
+    "title": "文化墙",
+    "tag": "品牌空间视觉",
+    "w": 1258,
+    "h": 1287
+  },
+  {
+    "src": "assets/works/work-16.jpg",
+    "title": "夜场活动",
+    "tag": "活动横幅",
+    "w": 1063,
+    "h": 638
+  }
+]
