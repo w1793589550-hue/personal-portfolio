@@ -394,6 +394,7 @@ h3 {
 .about,
 .works,
 .portals,
+.vibecoding,
 .experience,
 .contact {
   align-content: center;
@@ -408,6 +409,7 @@ h3 {
 
 .glass-panel,
 .metric,
+.vibe-card,
 .timeline article,
 .contact-form,
 .contact-card,
@@ -417,6 +419,126 @@ h3 {
   background: var(--paper-soft);
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
+}
+
+.vibe-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.vibe-card {
+  position: relative;
+  isolation: isolate;
+  min-height: 420px;
+  display: grid;
+  align-content: space-between;
+  gap: 22px;
+  overflow: hidden;
+  padding: 26px;
+  color: #2e2b27;
+  text-decoration: none;
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.vibe-card::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(194, 50, 45, 0.18), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(43, 112, 103, 0.18), transparent 28%),
+    linear-gradient(145deg, rgba(255, 250, 242, 0.94), rgba(244, 232, 217, 0.74));
+  content: "";
+}
+
+.vibe-card.featured {
+  min-height: 460px;
+  background: rgba(255, 250, 242, 0.78);
+}
+
+.vibe-card:hover,
+.vibe-card:focus-visible {
+  outline: none;
+  transform: translateY(-7px);
+  border-color: rgba(194, 50, 45, 0.32);
+  box-shadow: 0 30px 74px rgba(45, 35, 28, 0.18);
+}
+
+.vibe-index {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #1f1f1f;
+  color: #fffaf2;
+  font-weight: 900;
+}
+
+.vibe-card p {
+  margin: 0 0 10px;
+  color: var(--red);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vibe-card h3 {
+  max-width: 360px;
+  margin: 0 0 14px;
+  font-size: clamp(26px, 3vw, 42px);
+  line-height: 1.08;
+}
+
+.vibe-card strong {
+  display: block;
+  max-width: 420px;
+  color: #4f4943;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.vibe-card ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vibe-card li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #49443e;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.vibe-card li::before {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--red);
+  content: "";
+}
+
+.vibe-card em {
+  width: max-content;
+  border-radius: 999px;
+  padding: 11px 16px;
+  background: #1f1f1f;
+  color: #fffaf2;
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 900;
 }
 
 .about-text {
@@ -951,6 +1073,7 @@ textarea:focus {
   .hero,
   .about-layout,
   .portal-layout,
+  .vibe-layout,
   .contact-layout {
     grid-template-columns: 1fr;
   }
@@ -997,6 +1120,12 @@ textarea:focus {
   .timeline,
   .contact-form {
     grid-template-columns: 1fr;
+  }
+
+  .vibe-card,
+  .vibe-card.featured {
+    min-height: 360px;
+    padding: 22px;
   }
 
   .work-grid {
