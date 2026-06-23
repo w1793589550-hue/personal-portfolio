@@ -4,6 +4,13 @@ const sections = [...document.querySelectorAll("[data-section]")];
 const navLinks = [...document.querySelectorAll(".nav a")];
 const reveals = [...document.querySelectorAll(".reveal")];
 const heroIdentity = document.querySelector(".hero-identity");
+const scrollVideo = document.querySelector("#scrollVideo");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+let videoReady = false;
+let videoFrame = 0;
+let targetVideoRatio = 0;
+let renderedVideoRatio = 0;
+let lastSeekTime = 0;
 
 function shellScrolls() {
   return window.getComputedStyle(shell).overflowY !== "visible" && shell.scrollHeight > shell.clientHeight + 4;
@@ -22,6 +29,12 @@ function setProgress() {
   const max = scrollMaxValue();
   const value = max > 0 ? (scrollTopValue() / max) * 100 : 0;
   progress.style.width = `${value}%`;
+}
+
+function scrollRatio() {
+  const max = scrollMaxValue();
+  if (max <= 0) return 0;
+  return Math.min(1, Math.max(0, scrollTopValue() / max));
 }
 
 function targetTop(target) {
@@ -64,12 +77,68 @@ reveals.forEach((item) => revealObserver.observe(item));
 function onScroll() {
   setProgress();
   syncActiveNav();
+  syncScrollVideo();
 }
 
 shell.addEventListener("scroll", onScroll, { passive: true });
 window.addEventListener("scroll", onScroll, { passive: true });
 window.addEventListener("resize", onScroll);
 onScroll();
+
+function syncScrollVideo() {
+  if (!scrollVideo || !videoReady || reducedMotion.matches) return;
+  targetVideoRatio = scrollRatio();
+  if (videoFrame) return;
+  videoFrame = requestAnimationFrame(tickScrollVideo);
+}
+
+function tickScrollVideo() {
+  videoFrame = 0;
+  if (!scrollVideo || !videoReady || reducedMotion.matches) return;
+
+  const distance = targetVideoRatio - renderedVideoRatio;
+  renderedVideoRatio += distance * 0.12;
+  if (Math.abs(distance) < 0.0015) renderedVideoRatio = targetVideoRatio;
+
+  const now = performance.now();
+  const duration = Number.isFinite(scrollVideo.duration) ? scrollVideo.duration : 0;
+  if (duration > 0 && now - lastSeekTime > 50) {
+    const targetTime = Math.min(duration - 0.04, Math.max(0, duration * renderedVideoRatio));
+    if (Math.abs(scrollVideo.currentTime - targetTime) > 0.08) {
+      scrollVideo.currentTime = targetTime;
+      lastSeekTime = now;
+    }
+  }
+
+  const parallax = (renderedVideoRatio - 0.5) * -34;
+  document.documentElement.style.setProperty("--video-parallax", `${parallax.toFixed(2)}px`);
+  document.documentElement.style.setProperty("--scene-depth", (0.26 + renderedVideoRatio * 0.18).toFixed(3));
+
+  if (Math.abs(targetVideoRatio - renderedVideoRatio) > 0.0015) {
+    videoFrame = requestAnimationFrame(tickScrollVideo);
+  }
+}
+
+if (scrollVideo) {
+  scrollVideo.pause();
+  scrollVideo.addEventListener(
+    "loadedmetadata",
+    () => {
+      videoReady = true;
+      renderedVideoRatio = scrollRatio();
+      targetVideoRatio = renderedVideoRatio;
+      scrollVideo.pause();
+      syncScrollVideo();
+    },
+    { once: true }
+  );
+  scrollVideo.addEventListener("canplay", () => {
+    videoReady = true;
+    targetVideoRatio = scrollRatio();
+    scrollVideo.pause();
+    syncScrollVideo();
+  });
+}
 
 navLinks.forEach((link) => {
   link.addEventListener("click", (event) => {

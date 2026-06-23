@@ -12,6 +12,13 @@
   </head>
   <body>
     <div class="scroll-progress" aria-hidden="true"></div>
+    <div class="scroll-video-stage" aria-hidden="true">
+      <video id="scrollVideo" class="scroll-video" muted playsinline preload="auto">
+        <source src="assets/video/scroll-background-scrub.mp4" type="video/mp4" />
+      </video>
+      <div class="scroll-video-vignette"></div>
+      <div class="scroll-video-grain"></div>
+    </div>
 
     <header class="site-header">
       <a class="brand" href="#home" aria-label="回到首页">

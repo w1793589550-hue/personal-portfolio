@@ -470,7 +470,12 @@ async function serveStatic(req, res) {
     return;
   }
 
-  const headers = { "Content-Type": contentType(filePath), "Cache-Control": "no-store" };
+  const fileStat = fs.statSync(filePath);
+  const headers = {
+    "Content-Type": contentType(filePath),
+    "Cache-Control": "no-store",
+    "Accept-Ranges": "bytes",
+  };
   if (
     req.method === "GET"
     && path.extname(filePath).toLowerCase() === ".html"
@@ -480,12 +485,49 @@ async function serveStatic(req, res) {
     const cookie = recordVisit(req);
     if (cookie) headers["Set-Cookie"] = cookie;
   }
-  res.writeHead(200, headers);
+  const range = parseRangeHeader(req.headers.range, fileStat.size);
+  if (range) {
+    const { start, end } = range;
+    res.writeHead(206, {
+      ...headers,
+      "Content-Range": `bytes ${start}-${end}/${fileStat.size}`,
+      "Content-Length": end - start + 1,
+    });
+    if (req.method === "HEAD") {
+      res.end();
+      return;
+    }
+    fs.createReadStream(filePath, { start, end }).pipe(res);
+    return;
+  }
+
+  res.writeHead(200, { ...headers, "Content-Length": fileStat.size });
   if (req.method === "HEAD") {
     res.end();
     return;
   }
   fs.createReadStream(filePath).pipe(res);
+}
+
+function parseRangeHeader(header, size) {
+  const value = String(header || "");
+  const match = /^bytes=(\d*)-(\d*)$/.exec(value);
+  if (!match || size <= 0) return null;
+
+  let start = match[1] ? Number(match[1]) : 0;
+  let end = match[2] ? Number(match[2]) : size - 1;
+
+  if (!match[1] && match[2]) {
+    const suffixLength = Number(match[2]);
+    start = Math.max(0, size - suffixLength);
+    end = size - 1;
+  }
+
+  if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || end < start || start >= size) {
+    return null;
+  }
+
+  return { start, end: Math.min(end, size - 1) };
 }
 
 function contentType(filePath) {
