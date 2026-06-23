@@ -76,7 +76,7 @@ video {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  background: #070706;
+  background: #070706 url("assets/video/scroll-background-poster.jpg") center / cover no-repeat;
 }
 
 .scroll-video {

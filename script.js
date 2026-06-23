@@ -11,6 +11,8 @@ let videoFrame = 0;
 let targetVideoRatio = 0;
 let renderedVideoRatio = 0;
 let lastSeekTime = 0;
+const VIDEO_START_RATIO = 0.12;
+const VIDEO_END_RATIO = 0.96;
 
 function shellScrolls() {
   return window.getComputedStyle(shell).overflowY !== "visible" && shell.scrollHeight > shell.clientHeight + 4;
@@ -103,7 +105,7 @@ function tickScrollVideo() {
   const now = performance.now();
   const duration = Number.isFinite(scrollVideo.duration) ? scrollVideo.duration : 0;
   if (duration > 0 && now - lastSeekTime > 50) {
-    const targetTime = Math.min(duration - 0.04, Math.max(0, duration * renderedVideoRatio));
+    const targetTime = videoTimeFromRatio(renderedVideoRatio, duration);
     if (Math.abs(scrollVideo.currentTime - targetTime) > 0.08) {
       scrollVideo.currentTime = targetTime;
       lastSeekTime = now;
@@ -119,6 +121,11 @@ function tickScrollVideo() {
   }
 }
 
+function videoTimeFromRatio(ratio, duration) {
+  const safeRatio = VIDEO_START_RATIO + ratio * (VIDEO_END_RATIO - VIDEO_START_RATIO);
+  return Math.min(duration - 0.04, Math.max(0, duration * safeRatio));
+}
+
 if (scrollVideo) {
   scrollVideo.pause();
   scrollVideo.addEventListener(
@@ -127,6 +134,9 @@ if (scrollVideo) {
       videoReady = true;
       renderedVideoRatio = scrollRatio();
       targetVideoRatio = renderedVideoRatio;
+      if (Number.isFinite(scrollVideo.duration) && scrollVideo.duration > 0) {
+        scrollVideo.currentTime = videoTimeFromRatio(renderedVideoRatio, scrollVideo.duration);
+      }
       scrollVideo.pause();
       syncScrollVideo();
     },
